@@ -1,0 +1,33 @@
+.epp-queries-debug .dashicons {
+	cursor: pointer;
+}
+
+.epp-queries-debug .dashicons:before {
+	content: "\f140";
+}
+
+.epp-queries-debug .hide-query-results .query-results,
+.epp-queries-debug .hide-query-args .query-args,
+.epp-queries-debug .hide-query-errors .query-errors,
+.epp-queries-debug .hide-query-body .query-body {
+	display: none;
+}
+
+.epp-queries-debug .query-body,
+.epp-queries-debug .query-args,
+.epp-queries-debug .query-errors,
+.epp-queries-debug .query-results {
+	background-color: white;
+}
+
+.epp-queries-debug .hide-query-results .query-result-toggle:before,
+.epp-queries-debug .hide-query-args .query-args-toggle:before,
+.epp-queries-debug .hide-query-errors .query-errors-toggle:before,
+.epp-queries-debug .hide-query-body .query-body-toggle:before {
+	content: "\f142";
+}
+
+.epp-queries-debug .epp-query-failed .epp-query-response-code {
+	font-weight: bold;
+	color: red;
+}
