@@ -31,3 +31,11 @@
 	font-weight: bold;
 	color: red;
 }
+
+#debug-menu-target-EPP_Debug_Bar_ElasticPress_Plus .debug-bar-table {
+	clear: both;
+}
+
+#debug-menu-target-EPP_Debug_Bar_ElasticPress_Plus .debug-bar-table tr:nth-child(2n+1) {
+	background-color: #E8E8E8;
+};

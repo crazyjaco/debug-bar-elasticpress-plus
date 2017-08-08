@@ -25,18 +25,25 @@ class EPP_Debug_Bar_ElasticPress_Plus extends Debug_Bar_Panel {
 		add_action( 'wp_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts_styles' ) );
 
-		add_action ( 'ep_wp_query_search', array( $this, 'handle_query' ), 10, 3 );
+		add_action( 'ep_wp_query_search', array( $this, 'handle_query' ), 10, 3 );
 		// do_action( 'ep_wp_query_search', $new_posts, $search, $query );
 
 		// ep_wp_query_search  looks like this has the query and the results? - in class-ep-wp-query-integration.php
 		// ep_add_query_log  - in class-ep-api.php
 		// ep_get_plugins
+		 
+		add_action( 'ep_add_query_log', [ $this, 'handle_logging' ] );
 	}
 
 	public function handle_query( $new_posts, $search, $query ) {
 		$this->query_stack[] = $query;
+		error_log('GOT HERE');
 		$this->search_stack[] = $search;
 		$this->new_post_stack[] = $new_posts;
+	}
+
+	public function handle_logging( $query ) {
+		
 	}
 
 	/**
@@ -92,10 +99,19 @@ class EPP_Debug_Bar_ElasticPress_Plus extends Debug_Bar_Panel {
 
 		<h2><?php printf( __( '<span>Total ElasticPress Queries:</span> %d', 'debug-bar' ), count( $queries ) ); ?></h2>
 		<h2><?php printf( __( '<span>Total Blocking ElasticPress Query Time:</span> %d ms', 'debug-bar' ), (int) ( $total_query_time * 1000 ) ); ?></h2>
-		<h2><?php printf( __( '<span>Indexable Post Types:</span> %s', 'debug-bar' ), implode( '<br/>', array_values( ep_get_indexable_post_types() ) ) ); ?></h2>
-		<h2><?php printf( __( '<span>Indexable Post Statuses:</span> %s', 'debug-bar' ), implode( '<br/>', array_values( ep_get_indexable_post_status() ) ) ); ?></h2>
-		<h2><?php printf( __( '<span>Searchable Post Types:</span> %s', 'debug-bar' ), implode( '<br/>', array_values( ep_get_searchable_post_types() ) ) ); ?></h2>
 		<?php
+//global $wp_post_types; 
+//error_log( 'WP POST TYPES: ' . var_export( $wp_post_types, true ) );
+		if ( ! class_exists( 'Debug_Bar_Pretty_Output' ) ) {
+			require_once plugin_dir_path( __FILE__ ) . '../inc/debug-bar-pretty-output/class-debug-bar-pretty-output.php';
+		}
+
+		$properties = array();
+		$properties['indexable_post_types']    = ep_get_indexable_post_types();
+		$properties['indexable_post_statuses'] = ep_get_indexable_post_status();
+		$properties['searchable_post_types']   = ep_get_searchable_post_types();
+		echo Debug_Bar_Pretty_Output::get_table( $properties, __( 'Property', 'debug-bar-screen-info' ), __( 'Value', 'debug-bar-screen-info' ), 'epp-debug-bar' );
+
 
 		if ( empty( $queries ) ) :
 
